@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-
 function Header(props) {
   return (
     <header>
-      <h1>{props.title}</h1>
-      <span className="stats">Players: {props.initialPlayers.length}</span>
+      <h1>Scoreboard</h1>
+      <span className="stats">Players: {props.totalPlayers}</span>
     </header>
   );
 }
@@ -18,37 +17,43 @@ const Player = (props) => {
       <span className='player-name'>
     {props.name}
       </span>
-      <Counter score={props.score}/>
+      <Counter />
     </div>
   );
 }
 
-const Counter = (props) => {
-  return (
-    <div className="counter">
-      <button className='counter-action decrement'> - </button>
-      <span className='counter-score'>{props.score}</span>
-      <button className='counter-action increment'> + </button>
-    </div>
-  );
+class Counter extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      score: 0
+    };
+  }
+  render () {
+    return (
+      <div className="counter">
+        <button className='counter-action decrement'> - </button>
+        <span className='counter-score'>{this.state.score}</span>
+        <button className='counter-action increment'> + </button>
+      </div>
+    );
+  }
 }
 
 const App = (props) => {
   
-    return (
-      <div className="scoreboard">
-       <Header title='Scoreboard' totalPlayers={2}/>
-       {props.initialPlayers.map( player =>
-        <Player 
-          name={player.name} 
-          score={player.score}
-          key={player.id.toString()} 
-        />
-       )}
-       
-      </div>
-    );
-  
+  return (
+    <div className="scoreboard">
+     <Header title='Scoreboard' totalPlayers={props.initialPlayers.length}/>
+     {props.initialPlayers.map( player =>
+      <Player 
+        name={player.name}
+        key={player.id.toString()} 
+      />
+     )}
+     
+    </div>
+  );
 }
 
 App.defaultProps = { initialPlayers: [
