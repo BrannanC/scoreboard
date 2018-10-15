@@ -15,6 +15,7 @@ const Player = (props) => {
   return (
     <div className="player">
       <span className='player-name'>
+      <button className="remove-player" onClick={ () => props.removePlayer(props.id) }>x</button>
     {props.name}
       </span>
       <Counter />
@@ -57,33 +58,45 @@ class Counter extends Component {
   }
 }
 
-const App = (props) => {
-  
-  return (
-    <div className="scoreboard">
-     <Header title='Scoreboard' totalPlayers={props.initialPlayers.length}/>
-     {props.initialPlayers.map( player =>
-      <Player 
-        name={player.name}
-        key={player.id.toString()} 
-      />
-     )}
-     
-    </div>
-  );
-}
+class App extends Component {
 
-App.defaultProps = { initialPlayers: [
-  {
-    name: 'me',
-    score: 20,
-    id: 1
-  },
-  {
-    name: 'them',
-    score: 35,
-    id: 2
-  },
-]};
+  state = {
+    players: [
+      {
+        name: 'me',
+        id: 1
+      },
+      {
+        name: 'them',
+        id: 2
+      }
+    ]
+  };
+
+  handleRemovePlayer = (id) => {
+    this.setState( prevState => {
+      return {
+      players: prevState.players.filter(p => p.id !== id)
+      };
+    });
+  }
+
+  render () {
+    return (
+      <div className="scoreboard">
+       <Header title='Scoreboard' totalPlayers={this.state.players.length}/>
+       {this.state.players.map( player =>
+        <Player 
+          name={player.name}
+          key={player.id.toString()}
+          id={player.id}
+          removePlayer={this.handleRemovePlayer} 
+        />
+       )}
+       
+      </div>
+    );
+  }
+}
 
 export default App;
