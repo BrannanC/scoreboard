@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import Header from './Header';
 import Player from './Player';
+import AddPlayerForm from './AddPlayerForm';
 
 
 class App extends Component {
@@ -22,12 +23,26 @@ class App extends Component {
     ]
   };
 
+prevPlayerId = 2;
+
   handleScoreChange = (index, delta) => {
     this.setState( prevState => {
       return {
       score: prevState.players[index].score += delta
       };
     })
+  }
+
+  handleAddPlayer = (name) => {
+      this.setState({
+        players: [
+          ...this.state.players,
+          {
+          name,
+          score: 0,
+          id: this.prevPlayerId += 1
+        }]
+      });
   }
 
   handleRemovePlayer = (id) => {
@@ -58,6 +73,7 @@ class App extends Component {
         />
        )}
        
+      <AddPlayerForm addPlayer={this.handleAddPlayer} /> 
       </div>
     );
   }
